@@ -7,22 +7,22 @@ from pathlib import Path
 
 from src.predict import predict_churn, explain_customer
 
-
-FRONTEND_URL = os.getenv(
-    "FRONTEND_URL",
-    "http://localhost:5500"
-)
-
 app = FastAPI()
 
 # Configure Cross-Origin Resource Sharing to accept requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
+    allow_origins=[
+        "https://northstar-customer-analytics.onrender.com",
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "http://127.0.0.1:5501",
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
 
 class Customer(BaseModel):
     SeniorCitizen: int
