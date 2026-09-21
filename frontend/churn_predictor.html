@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LoneStar | Churn Prediction Engine</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg bg-white sticky-top border-bottom shadow">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <img src="assets/logo.png" alt="LoneStar Communications Logo" width="70" height="70" class="rounded">
+                <div class="lh-sm">
+                    <div class="company-name"><em>LoneStar Communications</em></div>
+                    <small class="text-muted " id="smallNavText"><em>Customer Analytics Portal</em></small>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="churn_predictor.html">
+                            Churn Predictor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="methodology.html">
+                            Methodology
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <main class="container d-flex justify-content-center py-5 mb-5">
+
+        <div id="apiStatusAlert" class=" alert alert-primary text-center shadow d-none" role="alert" style="max-width: 50vw;">
+            <div class="card-body" style="width:fit-content">
+                <div id="statusSpinner">
+                    <h5>Initializing Customer Churn Prediction Engine</h5>
+                    <div class="spinner-border text-primary m-4" role="status" style="height: 5rem; width: 5rem;">
+                    </div>
+                </div>
+                <div id="apiStatusMessage">
+                    <h6 >Thank You For Your Patience</h6>
+                    <p class="mb-0 centered-last-line">The predictive model's hosting server enters standby
+                        after 15 minutes of
+                        inactivity. Please allow roughly 60 seconds for it to initialize, or visit the <a
+                            href="methodology.html" class="alert-link">Methodology</a> page in the meantime to learn more about the model.
+                </div>
+            </div>
+        </div>
+
+        <form id="formContainer" class="needs-validation" novalidate>
+            <fieldset id="formFields">
+                <div class="card h-100 shadow" style="width: fit-content;">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h1 class="mb-1">Churn Assessment</h1>
+                            <p class="text-muted mb-0" style="font-size: 14px; padding-left: 5px;">
+                                Enter the customer's information to predict churn risk.
+                            </p>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="d-flex align-items-center gap-3 mb-1">
+                                    <h2 class="mb-0">Customer Profile</h2>
+                                    <hr class="flex-grow-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col pb-2">
+                                <label class="form-label  mb-0"">Customer Tenure</label>
+                            <small class=" text-muted d-block mb-2">Enter the number of months the customer has been
+                                    with the company.</small>
+                                    <input type="text" min="0" class="form-control no-decimals" id="tenure"
+                                        placeholder="ex: 24" required>
+                                    <div class="invalid-feedback">
+                                        Input required.
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col contract pb-2">
+                                <label class="form-label fw-semibold mb-0">
+                                    Committment Agreement
+                                </label>
+                                <small class="text-muted d-block mb-2">Select contract type.</small>
+                                <div class="d-flex flex-wrap gap-2 form-check">
+                                    <input type="radio" class="btn-check form-check-input" name="contract"
+                                        id="monthToMonth" value="Month-to-month" autocomplete="off" required>
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="monthToMonth">
+                                        Month-to-Month
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="contract" id="oneYear"
+                                        value="One year" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="oneYear">
+                                        One Year Contract
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="contract" id="twoYear"
+                                        value="Two year" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="twoYear">
+                                        Two Year Contract
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please select a contract type.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col">
+                                <label class="form-label fw-semibold mb-0">
+                                    Demographics
+                                </label>
+                                <small class="text-muted d-block mb-2">Select all that apply.</small>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <input type="checkbox" class="btn-check" id="seniorCitizen" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="seniorCitizen">
+                                        Senior Citizen
+                                    </label>
+                                    <input type="checkbox" class="btn-check" id="partner" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="partner">
+                                        Has Partner
+                                    </label>
+                                    <input type="checkbox" class="btn-check" id="dependents" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="dependents">
+                                        Has Dependents
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="d-flex align-items-center gap-3 mt-4 mb-1">
+                                    <h5 class="mb-0 fw-bold">Services & Add-Ons</h5>
+                                    <hr class="flex-grow-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col services pb-2">
+                                <label class="form-label fw-semibold mb-0">
+                                    Services
+                                </label>
+                                <small class="text-muted d-block mb-2">
+                                    Select service combination
+                                </small>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <input type="checkbox" class="btn-check service-option" name="phoneService"
+                                        id="phoneService" value="Yes" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="phoneService">
+                                        Phone
+                                    </label>
+                                    <input type="checkbox" class="btn-check service-option" name="internetService"
+                                        id="internetFiber" value="Fiber optic" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="internetFiber">
+                                        Fiber Internet
+                                    </label>
+                                    <input type="checkbox" class="btn-check service-option" name="internetService"
+                                        id="internetDSL" value="DSL" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="internetDSL">
+                                        DSL Internet
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select at least one service.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col pb-2">
+                                <label class="form-label fw-semibold mb-0">Additional Services</label>
+                                <small class="text-muted d-block mb-2">Select all that apply.</small>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="d-inline-block requires-phone" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires phone service.">
+                                        <input type="checkbox" class="btn-check phone-subservice sub-service"
+                                            id="multipleLines" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="multipleLines">
+                                            Multiple Lines
+                                        </label>
+                                    </span>
+
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="onlineSecurity" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="onlineSecurity">
+                                            Online Security
+                                        </label>
+                                    </span>
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="onlineBackup" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="onlineBackup">
+                                            Online Backup
+                                        </label>
+                                    </span>
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="deviceProtection" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="deviceProtection">
+                                            Device Protection
+                                        </label>
+                                    </span>
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="techSupport" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="techSupport">
+                                            Tech Support
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col">
+                                <label class="form-label fw-semibold mb-0">Entertainment</label>
+                                <small class="text-muted d-block mb-2">
+                                    Select all that apply.
+                                </small>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="streamingTV" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="streamingTV">
+                                            Streams TV
+                                        </label>
+                                    </span>
+                                    <span class="d-inline-block requires-internet" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-custom-class="tooltip"
+                                        data-bs-title="Requires internet service.">
+                                        <input type="checkbox" class="btn-check internet-subservice no-pointer-events"
+                                            id="streamingMovies" disabled>
+                                        <label class="btn btn-outline-dark custom-hover-btn" for="streamingMovies">
+                                            Streams Movies
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="d-flex align-items-center gap-3 mt-4 mb-1">
+                                    <h5 class="mb-0 fw-bold">Billing</h5>
+                                    <hr class="flex-grow-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col-3 pb-2">
+                                <label for="monthlyCharges" class="form-label fw-semibold mb-0">
+                                    Monthly Charges
+                                </label>
+                                <small class="text-muted d-block mb-2">
+                                    Enter monthly charges.
+                                </small>
+                                <div class="input-group charges monthlyCharges has-validation">
+                                    <span class="input-group-text currency form">$</span>
+                                    <input type="number" id="monthlyCharges" step="0.01" min="0"
+                                        class="form-control currencyInput" placeholder="00.00" required>
+                                    <div class="invalid-feedback">
+                                        Input required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="totalCharges" class="form-label fw-semibold mb-0">
+                                    Total Charges
+                                </label>
+                                <small class="text-muted d-block mb-2">
+                                    Enter total charges.
+                                </small>
+                                <div class="input-group charges has-validation">
+                                    <span class="input-group-text currency form">$</span>
+                                    <input type="number" id="totalCharges" step="0.01" min="0"
+                                        class="form-control currencyInput" placeholder="00.00" required>
+                                    <div class="invalid-feedback">
+                                        Input required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col pb-2">
+                                <label class="form-label fw-semibold mb-0">Payment Method</label>
+                                <small class="text-muted d-block mb-2">
+                                    Select payment method.
+                                </small>
+                                <div class="d-flex flex-wrap gap-2 form-check">
+                                    <input type="radio" class="btn-check form-check-input" name="paymentMethod"
+                                        id="electronicCheck" value="Electronic check" autocomplete="off" required>
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="electronicCheck">
+                                        Electronic Check
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="paymentMethod"
+                                        id="mailedCheck" value="Mailed check" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="mailedCheck">
+                                        Mailed Check
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="paymentMethod"
+                                        id="bankTransfer" value="Bank transfer" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="bankTransfer">
+                                        Bank Transfer
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="paymentMethod"
+                                        id="creditCard" value="Credit card" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="creditCard">
+                                        Credit Card
+                                    </label>
+                                    <div class="invalid-feedback">Please select a payment method.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-4 paperless-billing">
+                                <label for="PaperlessBilling" class="form-label d-block fw-semibold mb-2">Paperless
+                                    Billing</label>
+                                <div class="d-flex flex-wrap gap-2 form-check">
+                                    <input type="radio" class="btn-check form-check-input" name="paperlessBilling"
+                                        id="paperlessBillingYes" value="Yes" autocomplete="off" required>
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="paperlessBillingYes">
+                                        Yes
+                                    </label>
+                                    <input type="radio" class="btn-check form-check-input" name="paperlessBilling"
+                                        id="paperlessBillingNo" value="No" autocomplete="off">
+                                    <label class="btn btn-outline-dark custom-hover-btn" for="paperlessBillingNo">
+                                        No
+                                    </label>
+                                    <div class="invalid-feedback">Selection required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col">
+                                <hr class="flex-grow-1">
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4">
+                            <div class="col d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-4">
+                                    Generate Prediction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <div id="loadingCard" class="card text-center d-none">
+            <div class="card-body py-5">
+                <div id="loadingSpinner" class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Analyzing Customer</h5>
+                <p class="text-muted mb-0">
+                    Calculating churn risk...
+                </p>
+            </div>
+        </div>
+        <div id="resultsCard" class="card d-none shadow">
+            <div class="card-body px-4">
+                <!-- Churn Risk -->
+                <div class="row px-4">
+                    <div class="col-12 text-center">
+                        <div class="row g-3">
+                            <div class="align-items-center gap-3 mt-4">
+                                <h5 class="text-uppercase text-center text-muted">
+                                    Prediction
+                                </h5>
+                            </div>
+                        </div>
+                        <div id="churnRisk" class="display-1 fw-bold text-danger">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col">
+                        <hr class="flex-grow-1">
+                    </div>
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h6 class="text-uppercase text-muted mb-0">Churn Probability</h6>
+                    </div>
+                    <div class="col-md-8">
+                        <h6 class="text-uppercase text-muted mb-0">Risk Drivers vs. Retention Factors</h6>
+                    </div>
+                </div>
+
+                <div class="row align-items-center g-4">
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                        <div id="churnProbability" class="display-1 fw-bold text-danger m-0">
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 d-flex justify-content-center align-items-center">
+                        <canvas id="shapChart" class="w-85"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8" style="text-align: justify; padding: 0 5% 0 15%;">
+                        <p class="text-body-secondary mb-0 mx-auto"
+                            style="font-size: 12px; max-width: 650px; line-height: 1.5;">
+                            Features ranked by absolute impact. Right-leaning values increase churn probability,
+                            while left-leaning values mitigate risk.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col">
+                        <hr class="flex-grow-1">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-12 d-flex justify-content-center">
+                        <button type="button" id="newPrediction" class="btn btn-primary btn-lg px-5">
+                            Assess Another Customer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="pt-4  mt-3">
+        <div class="container">
+            <div class="row text-center mt-4 mb-3">
+                <div class="col" style="line-height: 2;">
+                    <h6 class="text-transition">
+                        <em>LoneStar Communications</em>
+                    </h6>
+                    <small class="text-muted">
+                        &copy; 2026 Adam Hayward | Student ID: 012287228
+                        <span class="text-muted mx-2">&bull;</span>
+                        Icons made by
+                        <a href="#" class="footer-link">
+                            Mayor Icons
+                        </a>
+                        from
+                        <a href="https://www.flaticon.com/" class="footer-link" target="_blank"
+                            rel="noopener noreferrer">
+                            Flaticon
+                        </a>
+                    </small>
+                </div>
+            </div>
+            <div class="row pb-4 mx-auto " style="width: 66.66%;">
+                <div class="col">
+                    <hr>
+                    <small class="mb-3 mx-auto text-muted" style="line-height: 1.5; text-align: justify;"
+                        id="technical-notice">
+                        <span class="text-uppercase fw-bold" style="font-size: 13px;">Technical Notice:</span>
+                        This application serves as <em>Task 2, Part C</em> for <em>WGU's Computer Science Capstone</em>.
+                        <em>"LoneStar Communications"</em> is
+                        an entirely fictional entity. The predictive engine uses a live machine learning model trained
+                        on the
+                        standard <a target="_blank" rel="noopener noreferrer"
+                            href="https://github.com/IBM/telco-customer-churn-on-icp4d">IBM Telco Customer Churn</a>
+                        dataset using <a target="_blank" rel="noopener noreferrer"
+                            href="https://xgboost.readthedocs.io/en/stable/">XGBoost</a>. The Juptyer Notebook used to
+                        develope methodology can be downloaded
+                        <a id="download-methodology"> here</a>.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
