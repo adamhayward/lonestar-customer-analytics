@@ -5,7 +5,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pathlib import Path
 
-from backend.src.predict import predict_churn, explain_customer
+from src.predict import predict_churn, explain_customer
+
 
 FRONTEND_URL = os.getenv(
     "FRONTEND_URL",

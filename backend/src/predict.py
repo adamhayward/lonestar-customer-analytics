@@ -3,7 +3,7 @@ import joblib
 import shap
 import pandas as pd
 
-from backend.src.features import engineer_features
+from src.features import engineer_features
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
