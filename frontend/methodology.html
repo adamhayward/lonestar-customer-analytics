@@ -14,9 +14,6 @@
             line-height: 125%;
         }
 
-
-        }
-
         td.linenos .normal {
             color: inherit;
             background-color: transparent;
@@ -7914,6 +7911,8 @@ all of MD as it is not optimized for dense, information rich UIs.
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 </head>
 
@@ -7927,13 +7926,13 @@ all of MD as it is not optimized for dense, information rich UIs.
                     <small class="text-muted " id="smallNavText"><em>Customer Analytics Portal</em></small>
                 </div>
             </a>
-            <!-- Mobile toggle -->
+
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navigation -->
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
 
@@ -7952,29 +7951,25 @@ all of MD as it is not optimized for dense, information rich UIs.
         </div>
     </nav>
 
-    <div id="downloadAlert" class=" alert alert-primary alert-dismissible fade show text-center shadow" role="alert">
+    <div id="downloadAlert" class="alert alert-primary alert-dismissible fade show text-center shadow" role="alert">
         <div class="card-body">
-            <div class="mt-1 mb-2">
-                <h5>Explore The Code Or Run The Analysis Yourself!</h5>
+            <div class="mt-1 mb-4">
+                <h5 id="alertHeading" class="mx-1">
+                    Explore The Code And Run The Analysis Yourself!
+                </h5>  
             </div>
-            <div id="downloadAlertMessage">
-                <p class="mb-3 centered-last-line">Download the complete Jupyter Notebook and open it in Jupyter
-                    Notebook or JupyterLab.</p>
+            <div id="downloadAlertMessage" class="mb-3">
 
-                <a class="btn btn-primary btn-lg" href="https://churn-prediction-api-0bus.onrender.com/download-methodology" onclick="
-                    document.getElementById('downloadAlert').remove();
-                    document.getElementById('methodologyPage').classList.remove('out-of-focus');
-                    "
-                    >Download Notebook</a>
-
-                <button id="close-warning" type="button" class="btn-close mt-1" onclick="
-                    document.getElementById('downloadAlert').remove();
-                    document.getElementById('methodologyPage').classList.remove('out-of-focus');
-                    " aria-label="Close">
-                </button>
+                <a id="downloadButton" class="btn btn-primary btn-lg">
+                    Download The Complete Jupyter Notebook
+                </a>
             </div>
         </div>
+        <button id="closeButton" type="button" class="btn-close" aria-label="Close">
+        </button>
     </div>
+
+    <script type="module" src="./js/download_popup.js"></script>
 
     <main id="methodologyPage" class="out-of-focus">
 

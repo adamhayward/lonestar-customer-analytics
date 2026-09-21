@@ -13,13 +13,12 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://northstar-customer-analytics.onrender.com"
+        "https://lonestar-customer-analytics.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
-
 
 class Customer(BaseModel):
     SeniorCitizen: int
