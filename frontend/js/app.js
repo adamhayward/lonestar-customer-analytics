@@ -506,9 +506,7 @@ const phoneServiceSelection =
     console.error(error);
     // Skip loading animation
     loadingCard.classList.add("d-none");
-    form.classList.remove("d-none");
     // Document error
-    const errorAlert = document.getElementById("errorAlert");
     errorAlert.textContent = `Server Connection Failed (${error.message}).`;
     // Display error message
     errorAlert.classList.remove("d-none");
