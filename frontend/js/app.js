@@ -29,7 +29,7 @@ const internetTooltipEl = document.querySelectorAll(".requires-internet");
 const internetTooltipInstance =
   bootstrap.Tooltip.getInstance(internetTooltipEl);
 
-const BACKEND_URL = "http://127.0.0.1:8000";
+const BACKEND_URL = "https://churn-prediction-api-0bus.onrender.com";
 
 // Initiate phone and internet subservice values
 let multipleLinesValue = "No phone service";
